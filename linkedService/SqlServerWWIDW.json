@@ -1,0 +1,17 @@
+{
+	"name": "SqlServerWWIDW",
+	"type": "Microsoft.DataFactory/factories/linkedservices",
+	"properties": {
+		"annotations": [],
+		"type": "SqlServer",
+		"typeProperties": {
+			"connectionString": "integrated security=True;data source=sqlserver;initial catalog=WideWorldImportersDW",
+			"userName": "sqlserver\\sqladminuser",
+			"encryptedCredential": "eyJDcmVkZW50aWFsSWQiOiJlM2JjYjdhNi03MzdkLTQxMjktOTBjZi05M2UwNGMyNTRlMTEiLCJWZXJzaW9uIjoiMi4wIiwiQ2xhc3NUeXBlIjoiTWljcm9zb2Z0LkRhdGFQcm94eS5Db3JlLkludGVyU2VydmljZURhdGFDb250cmFjdC5DcmVkZW50aWFsU1UwNkNZMTQifQ=="
+		},
+		"connectVia": {
+			"referenceName": "SHIR01",
+			"type": "IntegrationRuntimeReference"
+		}
+	}
+}

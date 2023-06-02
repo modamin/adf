@@ -1,0 +1,11 @@
+{
+	"name": "aminadfstorage",
+	"type": "Microsoft.DataFactory/factories/linkedservices",
+	"properties": {
+		"annotations": [],
+		"type": "AzureBlobFS",
+		"typeProperties": {
+			"url": "https://aminadfstorage.dfs.core.windows.net/"
+		}
+	}
+}

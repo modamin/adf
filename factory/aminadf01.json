@@ -1,0 +1,9 @@
+{
+	"name": "aminadf01",
+	"location": "canadacentral",
+	"identity": {
+		"type": "SystemAssigned",
+		"principalId": "aa4dd0e2-c01f-47ce-ac93-db44ed2c89c5",
+		"tenantId": "089a8171-e48b-4aab-9dfb-38d7ac5f889c"
+	}
+}

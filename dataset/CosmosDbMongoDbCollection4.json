@@ -1,0 +1,16 @@
+{
+	"name": "CosmosDbMongoDbCollection4",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "AminMongostoredb1",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "CosmosDbMongoDbApiCollection",
+		"schema": [],
+		"typeProperties": {
+			"collection": "c1"
+		}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

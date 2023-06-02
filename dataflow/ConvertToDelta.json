@@ -1,0 +1,102 @@
+{
+	"name": "ConvertToDelta",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "DelimitedText1",
+						"type": "DatasetReference"
+					},
+					"name": "source1"
+				}
+			],
+			"sinks": [
+				{
+					"linkedService": {
+						"referenceName": "aminadfstorage",
+						"type": "LinkedServiceReference"
+					},
+					"name": "sink1",
+					"rejectedDataLinkedService": {
+						"referenceName": "aminadfstorage",
+						"type": "LinkedServiceReference"
+					}
+				}
+			],
+			"transformations": [
+				{
+					"name": "select1"
+				}
+			],
+			"scriptLines": [
+				"source(output(",
+				"          {_c0} as short,",
+				"          {Draw Number} as short,",
+				"          Date as date 'MM/dd/yyyy',",
+				"          {Immigration program} as string,",
+				"          {Invitations issued} as short,",
+				"          {CRS score of lowest-ranked candidate invited} as short,",
+				"          {Date (hidden)} as date 'MM/dd/yyyy',",
+				"          {Programs covered} as string,",
+				"          Month as short,",
+				"          Year as short,",
+				"          month_year as date 'MM/dd/yyyy',",
+				"          {Date Full} as string",
+				"     ),",
+				"     allowSchemaDrift: false,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false) ~> source1",
+				"source1 select(mapColumn(",
+				"          {_c0},",
+				"          {Draw Number},",
+				"          Date,",
+				"          {Immigration program},",
+				"          {Invitations issued},",
+				"          {CRS score of lowest-ranked candidate invited},",
+				"          {Date (hidden)},",
+				"          {Programs covered},",
+				"          Month,",
+				"          Year,",
+				"          month_year,",
+				"          {Date Full}",
+				"     ),",
+				"     skipDuplicateMapInputs: false,",
+				"     skipDuplicateMapOutputs: false) ~> select1",
+				"select1 sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     format: 'delta',",
+				"     fileSystem: 'silver',",
+				"     overwrite:true,",
+				"     mergeSchema: false,",
+				"     autoCompact: false,",
+				"     optimizedWrite: false,",
+				"     vacuum: 0,",
+				"     deletable:false,",
+				"     insertable:true,",
+				"     updateable:false,",
+				"     upsertable:false,",
+				"     umask: 0022,",
+				"     preCommands: [],",
+				"     postCommands: [],",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true,",
+				"     mapColumn(",
+				"          {_c0},",
+				"          DrawNumber = {Draw Number},",
+				"          Date,",
+				"          ImmigrationProgram = {Immigration program},",
+				"          InvitationsIssued = {Invitations issued},",
+				"          CRSScoreLowestRankedInvite = {CRS score of lowest-ranked candidate invited},",
+				"          DateHidden = {Date (hidden)},",
+				"          ProgramsCovered = {Programs covered},",
+				"          Month,",
+				"          Year,",
+				"          MonthYear = month_year,",
+				"          DateFull = {Date Full}",
+				"     )) ~> sink1"
+			]
+		}
+	}
+}

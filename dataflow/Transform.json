@@ -1,0 +1,80 @@
+{
+	"name": "Transform",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"linkedService": {
+						"referenceName": "aminadfstorage",
+						"type": "LinkedServiceReference"
+					},
+					"name": "source1"
+				}
+			],
+			"sinks": [
+				{
+					"linkedService": {
+						"referenceName": "aminadfstorage",
+						"type": "LinkedServiceReference"
+					},
+					"name": "sink1"
+				}
+			],
+			"transformations": [
+				{
+					"name": "select1"
+				}
+			],
+			"scriptLines": [
+				"source(output(",
+				"          {_c0} as short,",
+				"          DrawNumber as short,",
+				"          Date as date,",
+				"          ImmigrationProgram as string,",
+				"          InvitationsIssued as short,",
+				"          CRSScoreLowestRankedInvite as short,",
+				"          DateHidden as date,",
+				"          ProgramsCovered as string,",
+				"          Month as short,",
+				"          Year as short,",
+				"          MonthYear as date,",
+				"          DateFull as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false,",
+				"     format: 'delta',",
+				"     fileSystem: 'silver') ~> source1",
+				"source1 select(mapColumn(",
+				"          DrawNumber,",
+				"          Date,",
+				"          ImmigrationProgram,",
+				"          DateHidden,",
+				"          Year,",
+				"          MonthYear,",
+				"          DateFull",
+				"     ),",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> select1",
+				"select1 sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     format: 'delta',",
+				"     fileSystem: 'gold',",
+				"     mergeSchema: false,",
+				"     autoCompact: false,",
+				"     optimizedWrite: false,",
+				"     vacuum: 0,",
+				"     deletable:false,",
+				"     insertable:true,",
+				"     updateable:false,",
+				"     upsertable:false,",
+				"     umask: 0022,",
+				"     preCommands: [],",
+				"     postCommands: [],",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> sink1"
+			]
+		}
+	}
+}

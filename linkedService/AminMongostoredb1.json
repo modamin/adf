@@ -1,0 +1,14 @@
+{
+	"name": "AminMongostoredb1",
+	"type": "Microsoft.DataFactory/factories/linkedservices",
+	"properties": {
+		"annotations": [],
+		"type": "CosmosDbMongoDbApi",
+		"typeProperties": {
+			"connectionString": "mongodb://amincosmosmongorestore:@amincosmosmongorestore.documents.azure.com:10255/?ssl=true;replicaSet=globaldb",
+			"database": "db1",
+			"isServerVersionAbove32": false,
+			"encryptedCredential": "ew0KICAiVmVyc2lvbiI6ICIyMDE3LTExLTMwIiwNCiAgIlByb3RlY3Rpb25Nb2RlIjogIktleSIsDQogICJTZWNyZXRDb250ZW50VHlwZSI6ICJQbGFpbnRleHQiLA0KICAiQ3JlZGVudGlhbElkIjogIkRBVEFGQUNUT1JZQEYyODc4OUUwLUY4Q0YtNDRCNC05RkUzLTJGNDcxN0U1OTM5Nl9lNGIzOGI0Zi1lMjdhLTQ4ZjQtOTU1NS00OTgzYTY1NzMxMzgiDQp9"
+		}
+	}
+}

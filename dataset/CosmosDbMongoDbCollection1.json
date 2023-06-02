@@ -1,0 +1,21 @@
+{
+	"name": "CosmosDbMongoDbCollection1",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "amincosmosdbrestoreSampleDB",
+			"type": "LinkedServiceReference"
+		},
+		"parameters": {
+			"CollectionName": {
+				"type": "string"
+			}
+		},
+		"annotations": [],
+		"type": "CosmosDbMongoDbApiCollection",
+		"schema": [],
+		"typeProperties": {
+			"collection": "SampleCollection"
+		}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

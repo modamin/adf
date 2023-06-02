@@ -1,0 +1,73 @@
+{
+	"name": "DelimitedText2",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "aminadfstorage",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "DelimitedText",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobFSLocation",
+				"fileName": "Canadian Immigration Dataset.csv",
+				"fileSystem": "bronze"
+			},
+			"columnDelimiter": ",",
+			"escapeChar": "\\",
+			"firstRowAsHeader": true,
+			"quoteChar": "\""
+		},
+		"schema": [
+			{
+				"name": "Prop_0",
+				"type": "String"
+			},
+			{
+				"name": "Draw Number",
+				"type": "String"
+			},
+			{
+				"name": "Date",
+				"type": "String"
+			},
+			{
+				"name": "Immigration program",
+				"type": "String"
+			},
+			{
+				"name": "Invitations issued",
+				"type": "String"
+			},
+			{
+				"name": "CRS score of lowest-ranked candidate invited",
+				"type": "String"
+			},
+			{
+				"name": "Date (hidden)",
+				"type": "String"
+			},
+			{
+				"name": "Programs covered",
+				"type": "String"
+			},
+			{
+				"name": "Month",
+				"type": "String"
+			},
+			{
+				"name": "Year",
+				"type": "String"
+			},
+			{
+				"name": "month_year",
+				"type": "String"
+			},
+			{
+				"name": "Date Full",
+				"type": "String"
+			}
+		]
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

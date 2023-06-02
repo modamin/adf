@@ -1,0 +1,16 @@
+{
+	"name": "CosmosDbMongoDbCollection3",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "DestinationDB",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "CosmosDbMongoDbApiCollection",
+		"schema": [],
+		"typeProperties": {
+			"collection": "c1"
+		}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}
