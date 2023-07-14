@@ -1,0 +1,59 @@
+{
+	"name": "dataflow1",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "DelimitedText1",
+						"type": "DatasetReference"
+					},
+					"name": "source1"
+				}
+			],
+			"sinks": [
+				{
+					"linkedService": {
+						"referenceName": "aminadfstorage",
+						"type": "LinkedServiceReference"
+					},
+					"name": "sink1"
+				}
+			],
+			"transformations": [],
+			"scriptLines": [
+				"source(output(",
+				"          Prop_0 as string,",
+				"          {Draw Number} as string,",
+				"          Date as string,",
+				"          {Immigration program} as string,",
+				"          {Invitations issued} as string,",
+				"          {CRS score of lowest-ranked candidate invited} as string,",
+				"          {Date (hidden)} as string,",
+				"          {Programs covered} as string,",
+				"          Month as string,",
+				"          Year as string,",
+				"          month_year as string,",
+				"          {Date Full} as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false) ~> source1",
+				"source1 sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     format: 'parquet',",
+				"     umask: 0022,",
+				"     preCommands: [],",
+				"     postCommands: [],",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true,",
+				"     partitionBy('key',",
+				"          0,",
+				"          Month,",
+				"          Year",
+				"     )) ~> sink1"
+			]
+		}
+	}
+}
