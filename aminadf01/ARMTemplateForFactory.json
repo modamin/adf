@@ -1,0 +1,1128 @@
+{
+	"$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+	"contentVersion": "1.0.0.0",
+	"parameters": {
+		"factoryName": {
+			"type": "string",
+			"metadata": "Data Factory name",
+			"defaultValue": "aminadf01"
+		},
+		"AminMongostoredb1_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'AminMongostoredb1'"
+		},
+		"CosmosDbMongoDb1_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'CosmosDbMongoDb1'"
+		},
+		"CosmosDbMongoDbSRC_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'CosmosDbMongoDbSRC'"
+		},
+		"DestinationDB_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'DestinationDB'"
+		},
+		"MongoDb1_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'MongoDb1'"
+		},
+		"MongoDb2_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'MongoDb2'"
+		},
+		"MongoDb3_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'MongoDb3'"
+		},
+		"SqlServerWWIDW_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'SqlServerWWIDW'",
+			"defaultValue": "Integrated Security=True;Data Source=sqlserver;Initial Catalog=WideWorldImportersDW"
+		},
+		"SqlServerWWIDW_password": {
+			"type": "secureString",
+			"metadata": "Secure string for 'password' of 'SqlServerWWIDW'"
+		},
+		"amincosmosdbmongo01SampleDB_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'amincosmosdbmongo01SampleDB'"
+		},
+		"amincosmosdbrestoreSampleDB_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'amincosmosdbrestoreSampleDB'"
+		},
+		"aminstoragemongo01_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'aminstoragemongo01'"
+		},
+		"sourceDB_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'sourceDB'"
+		},
+		"AminMongostoredb1_properties_typeProperties_database": {
+			"type": "string",
+			"defaultValue": "db1"
+		},
+		"CosmosDbMongoDb1_properties_typeProperties_database": {
+			"type": "string",
+			"defaultValue": "db1"
+		},
+		"CosmosDbMongoDbSRC_properties_typeProperties_database": {
+			"type": "string",
+			"defaultValue": "db1"
+		},
+		"DestinationDB_properties_typeProperties_database": {
+			"type": "string",
+			"defaultValue": "destinationDB"
+		},
+		"MongoDb1_properties_typeProperties_database": {
+			"type": "string",
+			"defaultValue": "SampleDB"
+		},
+		"MongoDb2_properties_typeProperties_database": {
+			"type": "string",
+			"defaultValue": "db1"
+		},
+		"MongoDb3_properties_typeProperties_database": {
+			"type": "string",
+			"defaultValue": "db1"
+		},
+		"SqlServerWWIDW_properties_typeProperties_userName": {
+			"type": "string",
+			"defaultValue": "sqlserver\\sqladminuser"
+		},
+		"aminadfstorage_properties_typeProperties_url": {
+			"type": "string",
+			"defaultValue": "https://aminadfstorage.dfs.core.windows.net/"
+		},
+		"amincosmosdbmongo01SampleDB_properties_typeProperties_database": {
+			"type": "string",
+			"defaultValue": "SampleDB"
+		},
+		"amincosmosdbrestoreSampleDB_properties_typeProperties_database": {
+			"type": "string",
+			"defaultValue": "SampleDB"
+		},
+		"sourceDB_properties_typeProperties_database": {
+			"type": "string",
+			"defaultValue": "sourceDB"
+		}
+	},
+	"variables": {
+		"factoryId": "[concat('Microsoft.DataFactory/factories/', parameters('factoryName'))]"
+	},
+	"resources": [
+		{
+			"name": "[concat(parameters('factoryName'), '/ConvertToDelta')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "Data flow1",
+						"type": "ExecuteDataFlow",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"dataflow": {
+								"referenceName": "ConvertToDelta",
+								"type": "DataFlowReference",
+								"parameters": {},
+								"datasetParameters": {
+									"source1": {},
+									"sink1": {}
+								}
+							},
+							"staging": {},
+							"compute": {
+								"coreCount": 16,
+								"computeType": "General"
+							},
+							"traceLevel": "Fine"
+						}
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {},
+					"cancelAfter": {}
+				},
+				"annotations": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/dataflows/ConvertToDelta')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/CopyCosmosConnector')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "Copy data1",
+						"type": "Copy",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "CosmosDbMongoDbApiSource",
+								"batchSize": 100
+							},
+							"sink": {
+								"type": "CosmosDbMongoDbApiSink",
+								"writeBatchTimeout": "00:30:00",
+								"writeBehavior": "upsert"
+							},
+							"enableStaging": false
+						},
+						"inputs": [
+							{
+								"referenceName": "sourceDBC1",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						],
+						"outputs": [
+							{
+								"referenceName": "CosmosDbMongoDbCollection4",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						]
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {},
+					"cancelAfter": {}
+				},
+				"annotations": [],
+				"lastPublishTime": "2023-05-20T23:42:52Z"
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/datasets/sourceDBC1')]",
+				"[concat(variables('factoryId'), '/datasets/CosmosDbMongoDbCollection4')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/Medallion')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "ConvertToDelta",
+						"type": "ExecuteDataFlow",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"dataflow": {
+								"referenceName": "ConvertToDelta",
+								"type": "DataFlowReference",
+								"parameters": {},
+								"datasetParameters": {
+									"source1": {},
+									"sink1": {}
+								}
+							},
+							"staging": {},
+							"compute": {
+								"coreCount": 8,
+								"computeType": "General"
+							},
+							"traceLevel": "Fine"
+						}
+					},
+					{
+						"name": "TransformAndLoad",
+						"type": "ExecuteDataFlow",
+						"dependsOn": [
+							{
+								"activity": "ConvertToDelta",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"dataflow": {
+								"referenceName": "Transform",
+								"type": "DataFlowReference",
+								"parameters": {},
+								"datasetParameters": {
+									"source1": {},
+									"sink1": {}
+								}
+							},
+							"staging": {},
+							"compute": {
+								"coreCount": 8,
+								"computeType": "General"
+							},
+							"traceLevel": "Fine"
+						}
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {},
+					"cancelAfter": {}
+				},
+				"annotations": [],
+				"lastPublishTime": "2023-05-25T01:01:06Z"
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/dataflows/ConvertToDelta')]",
+				"[concat(variables('factoryId'), '/dataflows/Transform')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/CosmosDbMongoDbCollection1')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "amincosmosdbrestoreSampleDB",
+					"type": "LinkedServiceReference"
+				},
+				"parameters": {
+					"CollectionName": {
+						"type": "string"
+					}
+				},
+				"annotations": [],
+				"type": "CosmosDbMongoDbApiCollection",
+				"schema": [],
+				"typeProperties": {
+					"collection": "SampleCollection"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/amincosmosdbrestoreSampleDB')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/CosmosDbMongoDbCollection2')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "amincosmosdbmongo01SampleDB",
+					"type": "LinkedServiceReference"
+				},
+				"parameters": {
+					"CollectionName": {
+						"type": "string"
+					}
+				},
+				"annotations": [],
+				"type": "CosmosDbMongoDbApiCollection",
+				"schema": [],
+				"typeProperties": {
+					"collection": {
+						"value": "@dataset().CollectionName",
+						"type": "Expression"
+					}
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/amincosmosdbmongo01SampleDB')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/CosmosDbMongoDbCollection3')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "DestinationDB",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "CosmosDbMongoDbApiCollection",
+				"schema": [],
+				"typeProperties": {
+					"collection": "c1"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/DestinationDB')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/CosmosDbMongoDbCollection4')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "AminMongostoredb1",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "CosmosDbMongoDbApiCollection",
+				"schema": [],
+				"typeProperties": {
+					"collection": "c1"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/AminMongostoredb1')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/DelimitedText1')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "aminadfstorage",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "DelimitedText",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"fileName": "Canadian Immigration Dataset.csv",
+						"fileSystem": "bronze"
+					},
+					"columnDelimiter": ",",
+					"escapeChar": "\\",
+					"firstRowAsHeader": true,
+					"quoteChar": "\""
+				},
+				"schema": [
+					{
+						"name": "Prop_0",
+						"type": "String"
+					},
+					{
+						"name": "Draw Number",
+						"type": "String"
+					},
+					{
+						"name": "Date",
+						"type": "String"
+					},
+					{
+						"name": "Immigration program",
+						"type": "String"
+					},
+					{
+						"name": "Invitations issued",
+						"type": "String"
+					},
+					{
+						"name": "CRS score of lowest-ranked candidate invited",
+						"type": "String"
+					},
+					{
+						"name": "Date (hidden)",
+						"type": "String"
+					},
+					{
+						"name": "Programs covered",
+						"type": "String"
+					},
+					{
+						"name": "Month",
+						"type": "String"
+					},
+					{
+						"name": "Year",
+						"type": "String"
+					},
+					{
+						"name": "month_year",
+						"type": "String"
+					},
+					{
+						"name": "Date Full",
+						"type": "String"
+					}
+				]
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/aminadfstorage')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/DelimitedText2')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "aminadfstorage",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "DelimitedText",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"fileName": "Canadian Immigration Dataset.csv",
+						"fileSystem": "bronze"
+					},
+					"columnDelimiter": ",",
+					"escapeChar": "\\",
+					"firstRowAsHeader": true,
+					"quoteChar": "\""
+				},
+				"schema": [
+					{
+						"name": "Prop_0",
+						"type": "String"
+					},
+					{
+						"name": "Draw Number",
+						"type": "String"
+					},
+					{
+						"name": "Date",
+						"type": "String"
+					},
+					{
+						"name": "Immigration program",
+						"type": "String"
+					},
+					{
+						"name": "Invitations issued",
+						"type": "String"
+					},
+					{
+						"name": "CRS score of lowest-ranked candidate invited",
+						"type": "String"
+					},
+					{
+						"name": "Date (hidden)",
+						"type": "String"
+					},
+					{
+						"name": "Programs covered",
+						"type": "String"
+					},
+					{
+						"name": "Month",
+						"type": "String"
+					},
+					{
+						"name": "Year",
+						"type": "String"
+					},
+					{
+						"name": "month_year",
+						"type": "String"
+					},
+					{
+						"name": "Date Full",
+						"type": "String"
+					}
+				]
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/aminadfstorage')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/Json1')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "aminstoragemongo01",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "Json",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobStorageLocation",
+						"container": "backup"
+					}
+				},
+				"schema": {}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/aminstoragemongo01')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/Json2')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "aminstoragemongo01",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "Json",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobStorageLocation",
+						"fileName": "collections.json",
+						"container": "backup"
+					}
+				},
+				"schema": {
+					"type": "object",
+					"properties": {
+						"collections": {
+							"type": "array",
+							"items": {
+								"type": "string"
+							}
+						}
+					}
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/aminstoragemongo01')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/sourceDBC1')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "sourceDB",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "CosmosDbMongoDbApiCollection",
+				"schema": [],
+				"typeProperties": {
+					"collection": "c1"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/sourceDB')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/AminMongostoredb1')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "CosmosDbMongoDbApi",
+				"typeProperties": {
+					"connectionString": "[parameters('AminMongostoredb1_connectionString')]",
+					"database": "[parameters('AminMongostoredb1_properties_typeProperties_database')]",
+					"isServerVersionAbove32": false
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/CosmosDbMongoDb1')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "CosmosDbMongoDbApi",
+				"typeProperties": {
+					"connectionString": "[parameters('CosmosDbMongoDb1_connectionString')]",
+					"database": "[parameters('CosmosDbMongoDb1_properties_typeProperties_database')]",
+					"isServerVersionAbove32": false
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/CosmosDbMongoDbSRC')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "CosmosDbMongoDbApi",
+				"typeProperties": {
+					"connectionString": "[parameters('CosmosDbMongoDbSRC_connectionString')]",
+					"database": "[parameters('CosmosDbMongoDbSRC_properties_typeProperties_database')]",
+					"isServerVersionAbove32": false
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/DestinationDB')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "CosmosDbMongoDbApi",
+				"typeProperties": {
+					"connectionString": "[parameters('DestinationDB_connectionString')]",
+					"database": "[parameters('DestinationDB_properties_typeProperties_database')]",
+					"isServerVersionAbove32": false
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/MongoDb1')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "MongoDbV2",
+				"typeProperties": {
+					"connectionString": "[parameters('MongoDb1_connectionString')]",
+					"database": "[parameters('MongoDb1_properties_typeProperties_database')]"
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/MongoDb2')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "MongoDbV2",
+				"typeProperties": {
+					"connectionString": "[parameters('MongoDb2_connectionString')]",
+					"database": "[parameters('MongoDb2_properties_typeProperties_database')]"
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/MongoDb3')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "MongoDbV2",
+				"typeProperties": {
+					"connectionString": "[parameters('MongoDb3_connectionString')]",
+					"database": "[parameters('MongoDb3_properties_typeProperties_database')]"
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/SqlServerWWIDW')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "SqlServer",
+				"typeProperties": {
+					"connectionString": "[parameters('SqlServerWWIDW_connectionString')]",
+					"userName": "[parameters('SqlServerWWIDW_properties_typeProperties_userName')]",
+					"password": {
+						"type": "SecureString",
+						"value": "[parameters('SqlServerWWIDW_password')]"
+					}
+				},
+				"connectVia": {
+					"referenceName": "SHIR01",
+					"type": "IntegrationRuntimeReference"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/integrationRuntimes/SHIR01')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/aminadfstorage')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "AzureBlobFS",
+				"typeProperties": {
+					"url": "[parameters('aminadfstorage_properties_typeProperties_url')]"
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/amincosmosdbmongo01SampleDB')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "CosmosDbMongoDbApi",
+				"typeProperties": {
+					"connectionString": "[parameters('amincosmosdbmongo01SampleDB_connectionString')]",
+					"database": "[parameters('amincosmosdbmongo01SampleDB_properties_typeProperties_database')]",
+					"isServerVersionAbove32": false
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/amincosmosdbrestoreSampleDB')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "CosmosDbMongoDbApi",
+				"typeProperties": {
+					"connectionString": "[parameters('amincosmosdbrestoreSampleDB_connectionString')]",
+					"database": "[parameters('amincosmosdbrestoreSampleDB_properties_typeProperties_database')]",
+					"isServerVersionAbove32": false
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/aminstoragemongo01')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "AzureBlobStorage",
+				"typeProperties": {
+					"connectionString": "[parameters('aminstoragemongo01_connectionString')]"
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/sourceDB')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "CosmosDbMongoDbApi",
+				"typeProperties": {
+					"connectionString": "[parameters('sourceDB_connectionString')]",
+					"database": "[parameters('sourceDB_properties_typeProperties_database')]",
+					"isServerVersionAbove32": false
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/SHIR01')]",
+			"type": "Microsoft.DataFactory/factories/integrationRuntimes",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"type": "SelfHosted",
+				"typeProperties": {}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/ConvertToDelta')]",
+			"type": "Microsoft.DataFactory/factories/dataflows",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"type": "MappingDataFlow",
+				"typeProperties": {
+					"sources": [
+						{
+							"dataset": {
+								"referenceName": "DelimitedText2",
+								"type": "DatasetReference"
+							},
+							"name": "source1"
+						}
+					],
+					"sinks": [
+						{
+							"linkedService": {
+								"referenceName": "aminadfstorage",
+								"type": "LinkedServiceReference"
+							},
+							"name": "sink1",
+							"rejectedDataLinkedService": {
+								"referenceName": "aminadfstorage",
+								"type": "LinkedServiceReference"
+							}
+						}
+					],
+					"transformations": [
+						{
+							"name": "select1"
+						}
+					],
+					"scriptLines": [
+						"source(output(",
+						"          Prop_0 as string,",
+						"          {Draw Number} as string,",
+						"          Date as string,",
+						"          {Immigration program} as string,",
+						"          {Invitations issued} as string,",
+						"          {CRS score of lowest-ranked candidate invited} as string,",
+						"          {Date (hidden)} as string,",
+						"          {Programs covered} as string,",
+						"          Month as string,",
+						"          Year as string,",
+						"          month_year as string,",
+						"          {Date Full} as string",
+						"     ),",
+						"     allowSchemaDrift: false,",
+						"     validateSchema: false,",
+						"     ignoreNoFilesFound: false) ~> source1",
+						"source1 select(mapColumn(",
+						"          DrawNumber = {Draw Number},",
+						"          Date,",
+						"          ImmigrationProgram = {Immigration program},",
+						"          InvitationsIssued = {Invitations issued},",
+						"          CRS = {CRS score of lowest-ranked candidate invited},",
+						"          DateHidden = {Date (hidden)},",
+						"          ProgramsCovered = {Programs covered},",
+						"          Month,",
+						"          Year,",
+						"          MonthYear = month_year,",
+						"          DateFull = {Date Full}",
+						"     ),",
+						"     skipDuplicateMapInputs: false,",
+						"     skipDuplicateMapOutputs: false) ~> select1",
+						"select1 sink(allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     format: 'delta',",
+						"     fileSystem: 'silver',",
+						"     folderPath: 'ImmigrationPartitioned',",
+						"     overwrite: true,",
+						"     mergeSchema: false,",
+						"     autoCompact: false,",
+						"     optimizedWrite: false,",
+						"     vacuum: 0,",
+						"     deletable: false,",
+						"     insertable: true,",
+						"     updateable: false,",
+						"     upsertable: false,",
+						"     umask: 0022,",
+						"     preCommands: [],",
+						"     postCommands: [],",
+						"     skipDuplicateMapInputs: true,",
+						"     skipDuplicateMapOutputs: true,",
+						"     mapColumn(",
+						"          DrawNumber,",
+						"          Date,",
+						"          ImmigrationProgram,",
+						"          InvitationsIssued,",
+						"          CRS,",
+						"          DateHidden,",
+						"          ProgramsCovered,",
+						"          Month,",
+						"          Year,",
+						"          MonthYear,",
+						"          DateFull",
+						"     ),",
+						"     partitionBy('key',",
+						"          0,",
+						"          Year,",
+						"          Month",
+						"     )) ~> sink1"
+					]
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/datasets/DelimitedText2')]",
+				"[concat(variables('factoryId'), '/linkedServices/aminadfstorage')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/Transform')]",
+			"type": "Microsoft.DataFactory/factories/dataflows",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"type": "MappingDataFlow",
+				"typeProperties": {
+					"sources": [
+						{
+							"linkedService": {
+								"referenceName": "aminadfstorage",
+								"type": "LinkedServiceReference"
+							},
+							"name": "source1"
+						}
+					],
+					"sinks": [
+						{
+							"linkedService": {
+								"referenceName": "aminadfstorage",
+								"type": "LinkedServiceReference"
+							},
+							"name": "sink1"
+						}
+					],
+					"transformations": [
+						{
+							"name": "select1"
+						}
+					],
+					"scriptLines": [
+						"source(output(",
+						"          {_c0} as short,",
+						"          DrawNumber as short,",
+						"          Date as date,",
+						"          ImmigrationProgram as string,",
+						"          InvitationsIssued as short,",
+						"          CRSScoreLowestRankedInvite as short,",
+						"          DateHidden as date,",
+						"          ProgramsCovered as string,",
+						"          Month as short,",
+						"          Year as short,",
+						"          MonthYear as date,",
+						"          DateFull as string",
+						"     ),",
+						"     allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     ignoreNoFilesFound: false,",
+						"     format: 'delta',",
+						"     fileSystem: 'silver') ~> source1",
+						"source1 select(mapColumn(",
+						"          DrawNumber,",
+						"          Date,",
+						"          ImmigrationProgram,",
+						"          DateHidden,",
+						"          Year,",
+						"          MonthYear,",
+						"          DateFull",
+						"     ),",
+						"     skipDuplicateMapInputs: true,",
+						"     skipDuplicateMapOutputs: true) ~> select1",
+						"select1 sink(allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     format: 'delta',",
+						"     fileSystem: 'gold',",
+						"     mergeSchema: false,",
+						"     autoCompact: false,",
+						"     optimizedWrite: false,",
+						"     vacuum: 0,",
+						"     deletable: false,",
+						"     insertable: true,",
+						"     updateable: false,",
+						"     upsertable: false,",
+						"     umask: 0022,",
+						"     preCommands: [],",
+						"     postCommands: [],",
+						"     skipDuplicateMapInputs: true,",
+						"     skipDuplicateMapOutputs: true) ~> sink1"
+					]
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/aminadfstorage')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/dataflow1')]",
+			"type": "Microsoft.DataFactory/factories/dataflows",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"type": "MappingDataFlow",
+				"typeProperties": {
+					"sources": [
+						{
+							"dataset": {
+								"referenceName": "DelimitedText1",
+								"type": "DatasetReference"
+							},
+							"name": "source1"
+						}
+					],
+					"sinks": [
+						{
+							"linkedService": {
+								"referenceName": "aminadfstorage",
+								"type": "LinkedServiceReference"
+							},
+							"name": "sink1"
+						}
+					],
+					"transformations": [],
+					"scriptLines": [
+						"source(output(",
+						"          Prop_0 as string,",
+						"          {Draw Number} as string,",
+						"          Date as string,",
+						"          {Immigration program} as string,",
+						"          {Invitations issued} as string,",
+						"          {CRS score of lowest-ranked candidate invited} as string,",
+						"          {Date (hidden)} as string,",
+						"          {Programs covered} as string,",
+						"          Month as string,",
+						"          Year as string,",
+						"          month_year as string,",
+						"          {Date Full} as string",
+						"     ),",
+						"     allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     ignoreNoFilesFound: false) ~> source1",
+						"source1 sink(allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     format: 'parquet',",
+						"     fileSystem: 'silver',",
+						"     folderPath: 'parquet',",
+						"     umask: 0022,",
+						"     preCommands: [],",
+						"     postCommands: [],",
+						"     skipDuplicateMapInputs: true,",
+						"     skipDuplicateMapOutputs: true,",
+						"     partitionBy('key',",
+						"          0,",
+						"          Month,",
+						"          Year",
+						"     )) ~> sink1"
+					]
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/datasets/DelimitedText1')]",
+				"[concat(variables('factoryId'), '/linkedServices/aminadfstorage')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/powerquery1')]",
+			"type": "Microsoft.DataFactory/factories/dataflows",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"type": "WranglingDataFlow",
+				"typeProperties": {
+					"sources": [
+						{
+							"name": "DelimitedText2",
+							"script": "source(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false) ~> DelimitedText2",
+							"dataset": {
+								"referenceName": "DelimitedText2",
+								"type": "DatasetReference"
+							}
+						}
+					],
+					"script": "section Section1;\r\nshared DelimitedText2 = let AdfDoc = AzureStorage.DataLakeContents(\"https://aminadfstorage.dfs.core.windows.net/bronze/Canadian Immigration Dataset.csv\"),Csv = Csv.Document(AdfDoc, [Delimiter = \",\", Encoding = TextEncoding.Utf8, QuoteStyle = QuoteStyle.Csv]), PromotedHeaders = Table.PromoteHeaders(Csv, [PromoteAllScalars = true]) in  PromotedHeaders;\r\nshared UserQuery = let Source = #\"DelimitedText2\" in Source;\r\n",
+					"documentLocale": "en-us"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/datasets/DelimitedText2')]"
+			]
+		}
+	]
+}

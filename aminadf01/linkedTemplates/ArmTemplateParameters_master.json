@@ -1,0 +1,90 @@
+{
+	"$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+	"contentVersion": "1.0.0.0",
+	"parameters": {
+		"factoryName": {
+			"value": "aminadf01"
+		},
+		"AminMongostoredb1_connectionString": {
+			"value": ""
+		},
+		"CosmosDbMongoDb1_connectionString": {
+			"value": ""
+		},
+		"CosmosDbMongoDbSRC_connectionString": {
+			"value": ""
+		},
+		"DestinationDB_connectionString": {
+			"value": ""
+		},
+		"MongoDb1_connectionString": {
+			"value": ""
+		},
+		"MongoDb2_connectionString": {
+			"value": ""
+		},
+		"MongoDb3_connectionString": {
+			"value": ""
+		},
+		"SqlServerWWIDW_connectionString": {
+			"value": "Integrated Security=True;Data Source=sqlserver;Initial Catalog=WideWorldImportersDW"
+		},
+		"SqlServerWWIDW_password": {
+			"value": ""
+		},
+		"amincosmosdbmongo01SampleDB_connectionString": {
+			"value": ""
+		},
+		"amincosmosdbrestoreSampleDB_connectionString": {
+			"value": ""
+		},
+		"aminstoragemongo01_connectionString": {
+			"value": ""
+		},
+		"sourceDB_connectionString": {
+			"value": ""
+		},
+		"AminMongostoredb1_properties_typeProperties_database": {
+			"value": "db1"
+		},
+		"CosmosDbMongoDb1_properties_typeProperties_database": {
+			"value": "db1"
+		},
+		"CosmosDbMongoDbSRC_properties_typeProperties_database": {
+			"value": "db1"
+		},
+		"DestinationDB_properties_typeProperties_database": {
+			"value": "destinationDB"
+		},
+		"MongoDb1_properties_typeProperties_database": {
+			"value": "SampleDB"
+		},
+		"MongoDb2_properties_typeProperties_database": {
+			"value": "db1"
+		},
+		"MongoDb3_properties_typeProperties_database": {
+			"value": "db1"
+		},
+		"SqlServerWWIDW_properties_typeProperties_userName": {
+			"value": "sqlserver\\sqladminuser"
+		},
+		"aminadfstorage_properties_typeProperties_url": {
+			"value": "https://aminadfstorage.dfs.core.windows.net/"
+		},
+		"amincosmosdbmongo01SampleDB_properties_typeProperties_database": {
+			"value": "SampleDB"
+		},
+		"amincosmosdbrestoreSampleDB_properties_typeProperties_database": {
+			"value": "SampleDB"
+		},
+		"sourceDB_properties_typeProperties_database": {
+			"value": "sourceDB"
+		},
+		"containerUri": {
+			"value": ""
+		},
+		"containerSasToken": {
+			"value": ""
+		}
+	}
+}

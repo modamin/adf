@@ -1,0 +1,238 @@
+{
+	"$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+	"contentVersion": "1.0.0.0",
+	"parameters": {
+		"factoryName": {
+			"type": "string",
+			"metadata": "Data Factory name",
+			"defaultValue": "aminadf01"
+		},
+		"AminMongostoredb1_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'AminMongostoredb1'"
+		},
+		"CosmosDbMongoDb1_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'CosmosDbMongoDb1'"
+		},
+		"CosmosDbMongoDbSRC_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'CosmosDbMongoDbSRC'"
+		},
+		"DestinationDB_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'DestinationDB'"
+		},
+		"MongoDb1_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'MongoDb1'"
+		},
+		"MongoDb2_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'MongoDb2'"
+		},
+		"MongoDb3_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'MongoDb3'"
+		},
+		"SqlServerWWIDW_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'SqlServerWWIDW'",
+			"defaultValue": "Integrated Security=True;Data Source=sqlserver;Initial Catalog=WideWorldImportersDW"
+		},
+		"SqlServerWWIDW_password": {
+			"type": "secureString",
+			"metadata": "Secure string for 'password' of 'SqlServerWWIDW'"
+		},
+		"amincosmosdbmongo01SampleDB_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'amincosmosdbmongo01SampleDB'"
+		},
+		"amincosmosdbrestoreSampleDB_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'amincosmosdbrestoreSampleDB'"
+		},
+		"aminstoragemongo01_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'aminstoragemongo01'"
+		},
+		"sourceDB_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'sourceDB'"
+		},
+		"AminMongostoredb1_properties_typeProperties_database": {
+			"type": "string",
+			"defaultValue": "db1"
+		},
+		"CosmosDbMongoDb1_properties_typeProperties_database": {
+			"type": "string",
+			"defaultValue": "db1"
+		},
+		"CosmosDbMongoDbSRC_properties_typeProperties_database": {
+			"type": "string",
+			"defaultValue": "db1"
+		},
+		"DestinationDB_properties_typeProperties_database": {
+			"type": "string",
+			"defaultValue": "destinationDB"
+		},
+		"MongoDb1_properties_typeProperties_database": {
+			"type": "string",
+			"defaultValue": "SampleDB"
+		},
+		"MongoDb2_properties_typeProperties_database": {
+			"type": "string",
+			"defaultValue": "db1"
+		},
+		"MongoDb3_properties_typeProperties_database": {
+			"type": "string",
+			"defaultValue": "db1"
+		},
+		"SqlServerWWIDW_properties_typeProperties_userName": {
+			"type": "string",
+			"defaultValue": "sqlserver\\sqladminuser"
+		},
+		"aminadfstorage_properties_typeProperties_url": {
+			"type": "string",
+			"defaultValue": "https://aminadfstorage.dfs.core.windows.net/"
+		},
+		"amincosmosdbmongo01SampleDB_properties_typeProperties_database": {
+			"type": "string",
+			"defaultValue": "SampleDB"
+		},
+		"amincosmosdbrestoreSampleDB_properties_typeProperties_database": {
+			"type": "string",
+			"defaultValue": "SampleDB"
+		},
+		"sourceDB_properties_typeProperties_database": {
+			"type": "string",
+			"defaultValue": "sourceDB"
+		},
+		"containerUri": {
+			"type": "string",
+			"metadata": "URI to storage account containing linked ARM templates"
+		},
+		"containerSasToken": {
+			"type": "string",
+			"metadata": "Sas token to storage account containing linked ARM templates"
+		}
+	},
+	"variables": {
+		"factoryId": "[concat('Microsoft.DataFactory/factories/', parameters('factoryName'))]"
+	},
+	"resources": [
+		{
+			"name": "aminadf01_ArmTemplate_0",
+			"type": "Microsoft.Resources/deployments",
+			"apiVersion": "2018-02-01",
+			"properties": {
+				"mode": "incremental",
+				"templateLink": {
+					"uri": "[concat(parameters('containerUri'), '/ArmTemplate_0.json', parameters('containerSasToken'))]",
+					"contentVersion": "1.0.0.0"
+				},
+				"parameters": {
+					"factoryName": {
+						"value": "[parameters('factoryName')]"
+					},
+					"AminMongostoredb1_connectionString": {
+						"value": "[parameters('AminMongostoredb1_connectionString')]"
+					},
+					"CosmosDbMongoDb1_connectionString": {
+						"value": "[parameters('CosmosDbMongoDb1_connectionString')]"
+					},
+					"CosmosDbMongoDbSRC_connectionString": {
+						"value": "[parameters('CosmosDbMongoDbSRC_connectionString')]"
+					},
+					"DestinationDB_connectionString": {
+						"value": "[parameters('DestinationDB_connectionString')]"
+					},
+					"MongoDb1_connectionString": {
+						"value": "[parameters('MongoDb1_connectionString')]"
+					},
+					"MongoDb2_connectionString": {
+						"value": "[parameters('MongoDb2_connectionString')]"
+					},
+					"MongoDb3_connectionString": {
+						"value": "[parameters('MongoDb3_connectionString')]"
+					},
+					"amincosmosdbmongo01SampleDB_connectionString": {
+						"value": "[parameters('amincosmosdbmongo01SampleDB_connectionString')]"
+					},
+					"amincosmosdbrestoreSampleDB_connectionString": {
+						"value": "[parameters('amincosmosdbrestoreSampleDB_connectionString')]"
+					},
+					"aminstoragemongo01_connectionString": {
+						"value": "[parameters('aminstoragemongo01_connectionString')]"
+					},
+					"sourceDB_connectionString": {
+						"value": "[parameters('sourceDB_connectionString')]"
+					},
+					"AminMongostoredb1_properties_typeProperties_database": {
+						"value": "[parameters('AminMongostoredb1_properties_typeProperties_database')]"
+					},
+					"CosmosDbMongoDb1_properties_typeProperties_database": {
+						"value": "[parameters('CosmosDbMongoDb1_properties_typeProperties_database')]"
+					},
+					"CosmosDbMongoDbSRC_properties_typeProperties_database": {
+						"value": "[parameters('CosmosDbMongoDbSRC_properties_typeProperties_database')]"
+					},
+					"DestinationDB_properties_typeProperties_database": {
+						"value": "[parameters('DestinationDB_properties_typeProperties_database')]"
+					},
+					"MongoDb1_properties_typeProperties_database": {
+						"value": "[parameters('MongoDb1_properties_typeProperties_database')]"
+					},
+					"MongoDb2_properties_typeProperties_database": {
+						"value": "[parameters('MongoDb2_properties_typeProperties_database')]"
+					},
+					"MongoDb3_properties_typeProperties_database": {
+						"value": "[parameters('MongoDb3_properties_typeProperties_database')]"
+					},
+					"aminadfstorage_properties_typeProperties_url": {
+						"value": "[parameters('aminadfstorage_properties_typeProperties_url')]"
+					},
+					"amincosmosdbmongo01SampleDB_properties_typeProperties_database": {
+						"value": "[parameters('amincosmosdbmongo01SampleDB_properties_typeProperties_database')]"
+					},
+					"amincosmosdbrestoreSampleDB_properties_typeProperties_database": {
+						"value": "[parameters('amincosmosdbrestoreSampleDB_properties_typeProperties_database')]"
+					},
+					"sourceDB_properties_typeProperties_database": {
+						"value": "[parameters('sourceDB_properties_typeProperties_database')]"
+					}
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "aminadf01_ArmTemplate_1",
+			"type": "Microsoft.Resources/deployments",
+			"apiVersion": "2018-02-01",
+			"properties": {
+				"mode": "incremental",
+				"templateLink": {
+					"uri": "[concat(parameters('containerUri'), '/ArmTemplate_1.json', parameters('containerSasToken'))]",
+					"contentVersion": "1.0.0.0"
+				},
+				"parameters": {
+					"factoryName": {
+						"value": "[parameters('factoryName')]"
+					},
+					"SqlServerWWIDW_connectionString": {
+						"value": "[parameters('SqlServerWWIDW_connectionString')]"
+					},
+					"SqlServerWWIDW_password": {
+						"value": "[parameters('SqlServerWWIDW_password')]"
+					},
+					"SqlServerWWIDW_properties_typeProperties_userName": {
+						"value": "[parameters('SqlServerWWIDW_properties_typeProperties_userName')]"
+					}
+				}
+			},
+			"dependsOn": [
+				"[resourceId('Microsoft.Resources/deployments', 'aminadf01_ArmTemplate_0')]"
+			]
+		}
+	]
+}
